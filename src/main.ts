@@ -5,11 +5,12 @@ class DateShift {
 
 	public constructor();
 	public constructor(another: DateShift);
+	public constructor(date: Date);
 	public constructor(dateString: string);
 	public constructor(year: number, month: number, day: number);
 
 	public constructor(
-		mixed?: DateShift | string | number,
+		mixed?: DateShift | Date | string | number,
 		month?: number,
 		day?: number,
 	) {
@@ -40,6 +41,10 @@ class DateShift {
 			this.year = mixed.year;
 			this.month = mixed.month;
 			this.day = mixed.day;
+		} else if (arguments.length === 1 && mixed instanceof Date) {
+			this.year = mixed.getFullYear();
+			this.month = mixed.getMonth() + 1;
+			this.day = mixed.getDate();
 		} else {
 			throw new Error("Invalid arguments");
 		}
@@ -74,10 +79,7 @@ class DateShift {
 		return (Array(length).join("0") + (num || "0")).slice(-length);
 	}
 
-	public compareTo(another: DateShift): 0 | 1 | -1 | null {
-		if (!another) {
-			return null;
-		}
+	public compareTo(another: DateShift): 0 | 1 | -1 {
 		if (this.year !== another.year) {
 			return this.year > another.year ? 1 : -1;
 		} else if (this.month !== another.month) {
@@ -110,14 +112,22 @@ class DateShift {
 		return maxDay[month - 1];
 	}
 
+	public isAfter(another: DateShift): boolean {
+		return this.compareTo(another) > 0;
+	}
+
+	public isBefore(another: DateShift): boolean {
+		return this.compareTo(another) < 0;
+	}
+
 	public isLeapYear(): boolean {
 		return (this.year % 4 === 0 && this.year % 100 !== 0) ||
 			(this.year % 400 === 0);
 	}
 
-	public toString(): string {
-		return this.year +
-			DateShift.#addZero(this.month.toString(), 2) +
+	public toString(separator = ""): string {
+		return this.year + separator +
+			DateShift.#addZero(this.month.toString(), 2) + separator +
 			DateShift.#addZero(this.day.toString(), 2);
 	}
 }
