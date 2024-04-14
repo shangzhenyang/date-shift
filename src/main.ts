@@ -54,23 +54,25 @@ class DateShift {
 		if (delta === 0) {
 			return this;
 		}
-		const thisMonthMaxDay = this.#getMaxDay(this.month);
 		this.day += delta;
-		if (this.day > thisMonthMaxDay) {
-			this.month++;
-			if (this.month > 12) {
-				this.year++;
-				this.month = 1;
+		while (this.day > this.#getMaxDay(this.month) || this.day < 1) {
+			const thisMonthMaxDay = this.#getMaxDay(this.month);
+			if (this.day > thisMonthMaxDay) {
+				this.month++;
+				if (this.month > 12) {
+					this.year++;
+					this.month = 1;
+				}
+				this.day -= thisMonthMaxDay;
+			} else if (this.day < 1) {
+				const lastMonthMaxDay = this.#getMaxDay(this.month - 1);
+				this.month--;
+				if (this.month < 1) {
+					this.year--;
+					this.month = 12;
+				}
+				this.day += lastMonthMaxDay;
 			}
-			this.day = this.day - thisMonthMaxDay;
-		} else if (this.day < 1) {
-			const lastMonthMaxDay = this.#getMaxDay(this.month - 1);
-			this.month--;
-			if (this.month < 1) {
-				this.year--;
-				this.month = 12;
-			}
-			this.day = lastMonthMaxDay + this.day;
 		}
 		return this;
 	}
@@ -88,6 +90,18 @@ class DateShift {
 			return this.day > another.day ? 1 : -1;
 		}
 		return 0;
+	}
+
+	public daysBetween(another: DateShift): number {
+		const thisDate = new Date(this.year, this.month - 1, this.day);
+		const anotherDate = new Date(
+			another.year,
+			another.month - 1,
+			another.day,
+		);
+		const diffTime = Math.abs(thisDate.getTime() - anotherDate.getTime());
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+		return diffDays;
 	}
 
 	public equals(another: DateShift): boolean {

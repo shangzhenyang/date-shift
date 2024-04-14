@@ -45,6 +45,22 @@ describe("DateShift", () => {
 		expect(today.day).toBe(new Date().getDate() + 1);
 	});
 
+	it("Adds one quarter to the date", () => {
+		const today = new DateShift(2023, 1, 1);
+		today.addDays(90);
+		expect(today.year).toBe(2023);
+		expect(today.month).toBe(4);
+		expect(today.day).toBe(1);
+	});
+
+	it("Adds one year to the date", () => {
+		const today = new DateShift(2023, 1, 1);
+		today.addDays(365);
+		expect(today.year).toBe(2024);
+		expect(today.month).toBe(1);
+		expect(today.day).toBe(1);
+	});
+
 	it("Checks if a year is a leap year", () => {
 		const leapYearDate = new DateShift(2024, 1, 1);
 		expect(leapYearDate.isLeapYear()).toBe(true);
@@ -66,5 +82,11 @@ describe("DateShift", () => {
 		expect(date1.equals(date2)).toBe(false);
 		expect(date1.isBefore(date2)).toBe(true);
 		expect(date1.isAfter(date2)).toBe(false);
+	});
+
+	it("Calculates the days between two dates", () => {
+		const date1 = new DateShift(2023, 4, 13);
+		const date2 = new DateShift(2023, 5, 15);
+		expect(date1.daysBetween(date2)).toBe(32);
 	});
 });

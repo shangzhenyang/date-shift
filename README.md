@@ -62,6 +62,14 @@ console.log(date1.isBefore(date2)); // true
 console.log(date1.isAfter(date2)); // false
 ```
 
+### Calculate Days Between Dates
+
+```javascript
+const date1 = new DateShift(2023, 4, 13);
+const date2 = new DateShift(2023, 5, 15);
+console.log(date1.daysBetween(date2)); // 32
+```
+
 ### Leap Year Check
 
 ```javascript
