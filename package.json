@@ -1,6 +1,6 @@
 {
 	"name": "date-shift",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "A simple JavaScript library for date manipulation and comparison.",
 	"main": "lib/main.js",
 	"types": "lib/main.d.ts",

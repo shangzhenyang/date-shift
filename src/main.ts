@@ -51,6 +51,9 @@ class DateShift {
 	}
 
 	public addDays(delta: number): DateShift {
+		if (isNaN(delta)) {
+			throw new Error("Invalid argument");
+		}
 		if (delta === 0) {
 			return this;
 		}
@@ -82,6 +85,9 @@ class DateShift {
 	}
 
 	public compareTo(another: DateShift): 0 | 1 | -1 {
+		if (!(another instanceof DateShift)) {
+			throw new Error("Invalid argument");
+		}
 		if (this.year !== another.year) {
 			return this.year > another.year ? 1 : -1;
 		} else if (this.month !== another.month) {
@@ -93,6 +99,9 @@ class DateShift {
 	}
 
 	public daysBetween(another: DateShift): number {
+		if (!(another instanceof DateShift)) {
+			throw new Error("Invalid argument");
+		}
 		const thisDate = this.toDate();
 		const anotherDate = another.toDate();
 		const diffTime = Math.abs(thisDate.getTime() - anotherDate.getTime());

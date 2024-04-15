@@ -106,4 +106,11 @@ describe("DateShift", () => {
 		const date2 = new DateShift(2023, 5, 15);
 		expect(date1.daysBetween(date2)).toBe(32);
 	});
+
+	it("Throws an error when adding an invalid number of days", () => {
+		const date = new DateShift();
+		expect(() => {
+			date.addDays(NaN);
+		}).toThrow("Invalid argument");
+	});
 });
