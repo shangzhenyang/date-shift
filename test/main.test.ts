@@ -38,27 +38,36 @@ describe("DateShift", () => {
 		expect(dateFromNumbers.day).toBe(1);
 	});
 
-	it("Adds one day to the date", () => {
-		const today = new DateShift();
-		const sameTodayRef = today.addDays(1);
-		expect(sameTodayRef).toBe(today);
-		expect(today.day).toBe(new Date().getDate() + 1);
+	it("Adds one day to the date - basic", () => {
+		const date = new DateShift(2023, 1, 1);
+		date.addDays(1);
+		expect(date.year).toBe(2023);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(2);
+	});
+
+	it("Adds one day to the date - end of month", () => {
+		const date = new DateShift(2023, 2, 28);
+		date.addDays(1);
+		expect(date.year).toBe(2023);
+		expect(date.month).toBe(3);
+		expect(date.day).toBe(1);
 	});
 
 	it("Adds one quarter to the date", () => {
-		const today = new DateShift(2023, 1, 1);
-		today.addDays(90);
-		expect(today.year).toBe(2023);
-		expect(today.month).toBe(4);
-		expect(today.day).toBe(1);
+		const date = new DateShift(2023, 1, 1);
+		date.addDays(90);
+		expect(date.year).toBe(2023);
+		expect(date.month).toBe(4);
+		expect(date.day).toBe(1);
 	});
 
 	it("Adds one year to the date", () => {
-		const today = new DateShift(2023, 1, 1);
-		today.addDays(365);
-		expect(today.year).toBe(2024);
-		expect(today.month).toBe(1);
-		expect(today.day).toBe(1);
+		const date = new DateShift(2023, 1, 1);
+		date.addDays(365);
+		expect(date.year).toBe(2024);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(1);
 	});
 
 	it("Checks if a year is a leap year", () => {
@@ -66,6 +75,14 @@ describe("DateShift", () => {
 		expect(leapYearDate.isLeapYear()).toBe(true);
 		const nonLeapYearDate = new DateShift(2023, 1, 1);
 		expect(nonLeapYearDate.isLeapYear()).toBe(false);
+	});
+
+	it("Returns the date as a Date object", () => {
+		const date = new DateShift(2023, 4, 13);
+		const dateObject = date.toDate();
+		expect(dateObject.getFullYear()).toBe(2023);
+		expect(dateObject.getMonth()).toBe(3);
+		expect(dateObject.getDate()).toBe(13);
 	});
 
 	it("Returns the date as a string", () => {

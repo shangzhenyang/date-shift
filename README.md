@@ -86,6 +86,13 @@ console.log(date.month); // 4
 console.log(date.day); // 13
 ```
 
+### Return Date as Date Object
+
+```javascript
+const date = new DateShift(2023, 4, 13);
+console.log(date.toDate());
+```
+
 ### Return Date as String
 
 ```javascript

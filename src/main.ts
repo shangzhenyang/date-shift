@@ -93,12 +93,8 @@ class DateShift {
 	}
 
 	public daysBetween(another: DateShift): number {
-		const thisDate = new Date(this.year, this.month - 1, this.day);
-		const anotherDate = new Date(
-			another.year,
-			another.month - 1,
-			another.day,
-		);
+		const thisDate = this.toDate();
+		const anotherDate = another.toDate();
 		const diffTime = Math.abs(thisDate.getTime() - anotherDate.getTime());
 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 		return diffDays;
@@ -137,6 +133,10 @@ class DateShift {
 	public isLeapYear(): boolean {
 		return (this.year % 4 === 0 && this.year % 100 !== 0) ||
 			(this.year % 400 === 0);
+	}
+
+	public toDate(): Date {
+		return new Date(this.year, this.month - 1, this.day);
 	}
 
 	public toString(separator = ""): string {
