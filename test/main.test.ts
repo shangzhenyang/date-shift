@@ -96,6 +96,37 @@ describe("DateShift", () => {
 		}).toThrow("Too large");
 	});
 
+	it("Adds an invalid number of days", () => {
+		const date = new DateShift();
+		expect(() => {
+			date.addDays(NaN);
+		}).toThrow("Invalid argument");
+	});
+
+	it("Subtracts one day from the date - basic", () => {
+		const date = new DateShift(2023, 1, 2);
+		date.addDays(-1);
+		expect(date.year).toBe(2023);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(1);
+	});
+
+	it("Subtracts one day from the date - beginning of month", () => {
+		const date = new DateShift(2023, 1, 1);
+		date.addDays(-1);
+		expect(date.year).toBe(2022);
+		expect(date.month).toBe(12);
+		expect(date.day).toBe(31);
+	});
+
+	it("Subtracts one year from the date", () => {
+		const date = new DateShift(2023, 1, 1);
+		date.addDays(-365);
+		expect(date.year).toBe(2022);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(1);
+	});
+
 	it("Checks if a year is a leap year", () => {
 		const leapYearDate = new DateShift(2024, 1, 1);
 		expect(leapYearDate.isLeapYear()).toBe(true);
@@ -131,12 +162,5 @@ describe("DateShift", () => {
 		const date1 = new DateShift(2023, 4, 13);
 		const date2 = new DateShift(2023, 5, 15);
 		expect(date1.daysBetween(date2)).toBe(32);
-	});
-
-	it("Throws an error when adding an invalid number of days", () => {
-		const date = new DateShift();
-		expect(() => {
-			date.addDays(NaN);
-		}).toThrow("Invalid argument");
 	});
 });

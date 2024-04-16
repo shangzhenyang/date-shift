@@ -71,13 +71,12 @@ class DateShift {
 				}
 				this.day -= thisMonthMaxDay;
 			} else if (this.day < 1) {
-				const lastMonthMaxDay = this.#getMaxDay(this.month - 1);
 				this.month--;
 				if (this.month < 1) {
 					this.year--;
 					this.month = 12;
 				}
-				this.day += lastMonthMaxDay;
+				this.day += this.#getMaxDay(this.month);
 			}
 		}
 		return this;
@@ -117,6 +116,9 @@ class DateShift {
 	}
 
 	#getMaxDay(month: number): number {
+		if (month < 1 || month > 12) {
+			throw new Error("Invalid month: " + month);
+		}
 		const maxDay = [
 			31, // January
 			this.isLeapYear() ? 29 : 28, // February
