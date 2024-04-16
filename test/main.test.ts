@@ -70,6 +70,32 @@ describe("DateShift", () => {
 		expect(date.day).toBe(1);
 	});
 
+	it("Adds decimal days to the date", () => {
+		const date = new DateShift(2023, 1, 1);
+		date.addDays(1.5);
+		expect(date.year).toBe(2023);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(3);
+	});
+
+	it("Adds huge number of days to the date", () => {
+		const date = new DateShift(2023, 1, 1);
+		date.addDays(1_000_000);
+		expect(date.year).toBe(4760);
+		expect(date.month).toBe(11);
+		expect(date.day).toBe(28);
+	});
+
+	it("Adds infinite days to the date", () => {
+		const date = new DateShift(2023, 1, 1);
+		expect(() => {
+			date.addDays(Number.POSITIVE_INFINITY);
+		}).toThrow("Too large");
+		expect(() => {
+			date.addDays(Number.NEGATIVE_INFINITY);
+		}).toThrow("Too large");
+	});
+
 	it("Checks if a year is a leap year", () => {
 		const leapYearDate = new DateShift(2024, 1, 1);
 		expect(leapYearDate.isLeapYear()).toBe(true);

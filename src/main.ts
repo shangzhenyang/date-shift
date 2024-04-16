@@ -54,10 +54,13 @@ class DateShift {
 		if (isNaN(delta)) {
 			throw new Error("Invalid argument");
 		}
+		if (Math.abs(delta) > 1_000_000) {
+			throw new Error("Too large");
+		}
 		if (delta === 0) {
 			return this;
 		}
-		this.day += delta;
+		this.day += Math.round(delta);
 		while (this.day > this.#getMaxDay(this.month) || this.day < 1) {
 			const thisMonthMaxDay = this.#getMaxDay(this.month);
 			if (this.day > thisMonthMaxDay) {
