@@ -82,10 +82,6 @@ class DateShift {
 		return this;
 	}
 
-	static #addZero(num: string, length: number): string {
-		return (Array(length).join("0") + (num || "0")).slice(-length);
-	}
-
 	public compareTo(another: DateShift): 0 | 1 | -1 {
 		if (!(another instanceof DateShift)) {
 			throw new Error("Invalid argument");
@@ -145,8 +141,10 @@ class DateShift {
 	}
 
 	public isLeapYear(): boolean {
-		return (this.year % 4 === 0 && this.year % 100 !== 0) ||
-			(this.year % 400 === 0);
+		return (
+			(this.year % 4 === 0 && this.year % 100 !== 0) ||
+			this.year % 400 === 0
+		);
 	}
 
 	public toDate(): Date {
@@ -154,9 +152,13 @@ class DateShift {
 	}
 
 	public toString(separator = ""): string {
-		return this.year + separator +
-			DateShift.#addZero(this.month.toString(), 2) + separator +
-			DateShift.#addZero(this.day.toString(), 2);
+		return (
+			this.year +
+			separator +
+			this.month.toString().padStart(2, "0") +
+			separator +
+			this.day.toString().padStart(2, "0")
+		);
 	}
 }
 
