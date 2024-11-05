@@ -15,10 +15,10 @@ class DateShift {
 		day?: number,
 	) {
 		if (arguments.length === 0) {
-			const dateObj = new Date();
-			this.year = dateObj.getFullYear();
-			this.month = dateObj.getMonth() + 1;
-			this.day = dateObj.getDate();
+			const today = new Date();
+			this.year = today.getFullYear();
+			this.month = today.getMonth() + 1;
+			this.day = today.getDate();
 		} else if (
 			arguments.length === 3 &&
 			typeof mixed === "number" &&
@@ -33,10 +33,23 @@ class DateShift {
 			typeof mixed === "string" &&
 			mixed.includes("-")
 		) {
-			const dateSplit = mixed.split("-");
-			this.year = parseInt(dateSplit[0]);
-			this.month = parseInt(dateSplit[1]);
-			this.day = parseInt(dateSplit[2]);
+			const dateParts = mixed
+				.split("-")
+				.map((part) => parseInt(part))
+				.filter((part) => !isNaN(part));
+			if (dateParts.length !== 2 && dateParts.length !== 3) {
+				throw new Error("Invalid date string");
+			}
+			if (dateParts.length === 2) {
+				const today = new Date();
+				this.year = today.getFullYear();
+				this.month = dateParts[0];
+				this.day = dateParts[1];
+			} else {
+				this.year = dateParts[0];
+				this.month = dateParts[1];
+				this.day = dateParts[2];
+			}
 		} else if (arguments.length === 1 && mixed instanceof DateShift) {
 			this.year = mixed.year;
 			this.month = mixed.month;
@@ -111,6 +124,13 @@ class DateShift {
 		return this.compareTo(another) === 0;
 	}
 
+	public format(format: string): string {
+		return format
+			.replace("YYYY", this.year.toString())
+			.replace("MM", this.month.toString().padStart(2, "0"))
+			.replace("DD", this.day.toString().padStart(2, "0"));
+	}
+
 	#getMaxDay(month: number): number {
 		if (month < 1 || month > 12) {
 			throw new Error("Invalid month: " + month);
@@ -140,6 +160,16 @@ class DateShift {
 		return this.compareTo(another) < 0;
 	}
 
+	public isBetween(start: DateShift, end: DateShift): boolean {
+		return this.isAfter(start) && this.isBefore(end);
+	}
+
+	public isBetweenInclusive(start: DateShift, end: DateShift): boolean {
+		return (
+			this.isBetween(start, end) || this.equals(start) || this.equals(end)
+		);
+	}
+
 	public isLeapYear(): boolean {
 		return (
 			(this.year % 4 === 0 && this.year % 100 !== 0) ||
@@ -159,6 +189,10 @@ class DateShift {
 			separator +
 			this.day.toString().padStart(2, "0")
 		);
+	}
+
+	public valueOf(): number {
+		return this.toDate().valueOf();
 	}
 }
 

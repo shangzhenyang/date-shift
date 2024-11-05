@@ -2,11 +2,11 @@ import DateShift from "../src/main";
 
 describe("DateShift", () => {
 	it("Initializes with today's date", () => {
+		const date = new DateShift();
 		const today = new Date();
-		const dateShiftToday = new DateShift();
-		expect(dateShiftToday.year).toEqual(today.getFullYear());
-		expect(dateShiftToday.month).toEqual(today.getMonth() + 1);
-		expect(dateShiftToday.day).toEqual(today.getDate());
+		expect(date.year).toEqual(today.getFullYear());
+		expect(date.month).toEqual(today.getMonth() + 1);
+		expect(date.day).toEqual(today.getDate());
 	});
 
 	it("Initializes with a copy of another DateShift object", () => {
@@ -16,26 +16,42 @@ describe("DateShift", () => {
 	});
 
 	it("Initializes with a copy of another Date object", () => {
-		const date = new Date(2024, 0, 1); // January 1, 2024
-		const dateShiftFromObject = new DateShift(date);
-		expect(dateShiftFromObject.year).toBe(2024);
-		expect(dateShiftFromObject.month).toBe(1);
-		expect(dateShiftFromObject.day).toBe(1);
+		const dateObject = new Date(2024, 0, 1); // January 1, 2024
+		const date = new DateShift(dateObject);
+		expect(date.year).toBe(2024);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(1);
 	});
 
 	it("Initializes from a date string", () => {
-		const dateString = "2024-01-01";
-		const dateFromString = new DateShift(dateString);
-		expect(dateFromString.year).toBe(2024);
-		expect(dateFromString.month).toBe(1);
-		expect(dateFromString.day).toBe(1);
+		const dateString = "2024-01-02";
+		const date = new DateShift(dateString);
+		expect(date.year).toBe(2024);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(2);
+	});
+
+	it("Initializes from a date string without year", () => {
+		const dateString = "01-02";
+		const date = new DateShift(dateString);
+		const today = new Date();
+		expect(date.year).toBe(today.getFullYear());
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(2);
+	});
+
+	it("Initializes from an invalid date string", () => {
+		const invalidDateString = "hello-world";
+		expect(() => {
+			new DateShift(invalidDateString);
+		}).toThrow("Invalid date string");
 	});
 
 	it("Initializes from year, month, and day numbers", () => {
-		const dateFromNumbers = new DateShift(2024, 1, 1);
-		expect(dateFromNumbers.year).toBe(2024);
-		expect(dateFromNumbers.month).toBe(1);
-		expect(dateFromNumbers.day).toBe(1);
+		const date = new DateShift(2024, 1, 1);
+		expect(date.year).toBe(2024);
+		expect(date.month).toBe(1);
+		expect(date.day).toBe(1);
 	});
 
 	it("Adds one day to the date - basic", () => {
@@ -147,15 +163,22 @@ describe("DateShift", () => {
 		expect(date.toString()).toBe("20230413");
 		expect(date.toString("-")).toBe("2023-04-13");
 		expect(date.toString("/")).toBe("2023/04/13");
+		expect(date.format("MM-DD")).toBe("04-13");
+		expect(date.format("DD/MM/YYYY")).toBe("13/04/2023");
 	});
 
-	it("Compares two dates", () => {
+	it("Compares dates", () => {
 		const date1 = new DateShift(2023, 4, 13);
 		const date2 = new DateShift(2023, 5, 15);
+		const date3 = new DateShift(2023, 5, 15);
 		expect(date1.compareTo(date2)).toBe(-1);
 		expect(date1.equals(date2)).toBe(false);
 		expect(date1.isBefore(date2)).toBe(true);
 		expect(date1.isAfter(date2)).toBe(false);
+		expect(date1 < date2).toBe(true);
+		expect(date1 > date2).toBe(false);
+		expect(date2.isBetween(date1, date3)).toBe(false);
+		expect(date2.isBetweenInclusive(date1, date3)).toBe(true);
 	});
 
 	it("Calculates the days between two dates", () => {

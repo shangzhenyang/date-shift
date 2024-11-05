@@ -1,6 +1,6 @@
 # date-shift
 
-A simple JavaScript library for date manipulation and comparison.
+A lightweight JavaScript library for date manipulation and comparison.
 
 ## Installation
 
@@ -25,10 +25,13 @@ const todayCopy = new DateShift(today);
 const dateFromObject = new DateShift(new Date());
 
 // Constructs from a string
-const dateFromString = new DateShift("2024-01-01");
+const dateFromString = new DateShift("2024-01-02");
+
+// Constructs from a string: uses the current year
+const dateFromStringWithoutYear = new DateShift("01-02");
 
 // Constructs from year, month, and day numbers
-const dateFromNumbers = new DateShift(2024, 1, 1);
+const dateFromNumbers = new DateShift(2024, 1, 2);
 ```
 
 ### Add Days
@@ -56,10 +59,15 @@ for (let i = 0; i < 30; i++) {
 ```javascript
 const date1 = new DateShift(2023, 4, 13);
 const date2 = new DateShift(2023, 5, 15);
+const date3 = new DateShift(2023, 5, 15);
 console.log(date1.compareTo(date2)); // -1 (date1 is earlier than date2)
 console.log(date1.equals(date2)); // false
 console.log(date1.isBefore(date2)); // true
 console.log(date1.isAfter(date2)); // false
+console.log(date1 < date2); // true
+console.log(date1 > date2); // false
+console.log(date2.isBetween(date1, date3)); // false
+console.log(date2.isBetweenInclusive(date1, date3)); // true
 ```
 
 ### Calculate Days Between Dates
@@ -100,6 +108,8 @@ const date = new DateShift(2023, 4, 13);
 console.log(date.toString()); // "20230413"
 console.log(date.toString("-")); // "2023-04-13"
 console.log(date.toString("/")); // "2023/04/13"
+console.log(date.format("MM-DD")); // "04-13"
+console.log(date.format("DD/MM/YYYY")); // "13/04/2023"
 ```
 
 ## License
