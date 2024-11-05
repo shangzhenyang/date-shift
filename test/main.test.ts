@@ -48,10 +48,10 @@ describe("DateShift", () => {
 	});
 
 	it("Initializes from year, month, and day numbers", () => {
-		const date = new DateShift(2024, 1, 1);
+		const date = new DateShift(2024, 1, 2);
 		expect(date.year).toBe(2024);
 		expect(date.month).toBe(1);
-		expect(date.day).toBe(1);
+		expect(date.day).toBe(2);
 	});
 
 	it("Adds one day to the date - basic", () => {
